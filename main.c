@@ -171,11 +171,15 @@ double* perform_relaxation(double** matrix, int size, double precision) {
          * Hence, the program functions correctly.
          */
         // Value to check must not be part of the outer values and must be in range.
-//        int valueToCheck = 231543;
-//        printf("Value to test: %.3lf\tAbove: %.3lf\tBelow: %.3lf\tLeft: %.3lf\t"
-//                   "Right: %.3lf\n", flattenedMatrix[valueToCheck],
-//                   flattenedMatrix[valueToCheck-size], flattenedMatrix[valueToCheck+size],
-//                   flattenedMatrix[valueToCheck-1], flattenedMatrix[valueToCheck+1]);
+        int valueToCheck = 23153;
+        printf("Value to test: %.3lf\tAbove: %.3lf\tBelow: %.3lf\tLeft: %.3lf\t"
+                   "Right: %.3lf\n", flattenedMatrix[valueToCheck],
+                   flattenedMatrix[valueToCheck-size], flattenedMatrix[valueToCheck+size],
+                   flattenedMatrix[valueToCheck-1], flattenedMatrix[valueToCheck+1]);
+        printf("Expected value: %.4lf\n", (flattenedMatrix[valueToCheck-size] +
+        flattenedMatrix[valueToCheck+size] + flattenedMatrix[valueToCheck-1] +
+        flattenedMatrix[valueToCheck+1]) / 4);
+
         return flattenedMatrix;
     }
     MPI_Gatherv(flattenedMatrix, matrixSize, MPI_DOUBLE, NULL,NULL, NULL,
@@ -187,7 +191,7 @@ double* perform_relaxation(double** matrix, int size, double precision) {
 
 int main (int argc, char** argv) {
     MPI_Init(&argc, &argv);
-    int size = 2000; // Array size, can be changed.
+    int size = 4000; // Array size, can be changed.
     double outerVal = 1.0; // Outer value. Can be changed.
     double** matrix = (double**) malloc((size_t) size * sizeof(double*));
     if (matrix == NULL) {
@@ -227,6 +231,8 @@ int main (int argc, char** argv) {
 //    fprintf(file, "\n");
 //    fclose(file);
     free(resultMatrix);
+    FILE* f = fopen("times.txt", "a");
+    fprintf(f, "%g,", end-start);
     MPI_Finalize();
     return 0;
 }
