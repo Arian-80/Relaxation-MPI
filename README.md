@@ -1,2 +1,2 @@
 # Relaxation-MPI
-An implementation of the relaxation technique to solve differential equations using MPI in C.
+Parallel implementation of the Relaxation algorithm to solve differential equations in C, using MPI.
